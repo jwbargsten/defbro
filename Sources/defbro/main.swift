@@ -7,15 +7,14 @@ import ApplicationServices
 import ArgumentParser
 
 
-func main1(bundleId: String?, isJson: Bool = false) throws -> Void {
+func handleCommand(bundleId: String?, isJson: Bool = false) throws -> Void {
     var standardError = FileHandle.standardError
     
-    let appUrlsHttps = getAppURLs(url: "https:")
     let appUrlsHttp = getAppURLs(url: "http:")
     
-    let defaultBundleURL = getDefaultAppURL(url: "https:")
+    let defaultBundleURL = getDefaultAppURL(url: "http:")
     
-    let bundles = Array(appUrlsHttps.union(appUrlsHttp))
+    let bundles = Array(appUrlsHttp)
         .map( {Bundle(url: $0)!})
         .filter( {(b: Bundle) -> Bool in b.bundleIdentifier != nil })
         .map( { BrowserBundle(
@@ -48,7 +47,7 @@ func main1(bundleId: String?, isJson: Bool = false) throws -> Void {
             } else {
                 print("setting default browser to \(b.id)", to:&standardError)
                 LSSetDefaultHandlerForURLScheme("http" as CFString, b.id as CFString)
-                //LSSetDefaultHandlerForURLScheme("https" as CFString, b.id as CFString)
+                //https not necessary
             }
         }
     }
@@ -62,7 +61,7 @@ struct Command: ParsableCommand {
     var bundleId: String?
     
     mutating func run() throws {
-        try main1(bundleId: bundleId, isJson: json)
+        try handleCommand(bundleId: bundleId, isJson: json)
     }
 }
 
