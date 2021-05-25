@@ -1,6 +1,6 @@
 # defbro
 
-Change the default browser in macOS.
+Change the default browser in macOS (Catalina, Big Sur).
 
 ## Installation
 
